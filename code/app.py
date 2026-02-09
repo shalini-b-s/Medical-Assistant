@@ -33,12 +33,12 @@ def generate():
         else:
             return jsonify({'error': "Invalid model selection"}), 400
         
-        result['duration'] = time.time() - start_time
-        return jsonify(result)
+        result.duration = time.time() - start_time
+        return jsonify({'content': result.content})
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug = True)

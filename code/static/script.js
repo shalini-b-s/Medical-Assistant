@@ -106,6 +106,8 @@ async function sendMessage(content, model) {
 
         const data = await response.json();
 
+        console.log("Response from server:", data);
+
         let aiMessage;
         if (data.error) {
             aiMessage = {
@@ -118,7 +120,7 @@ async function sendMessage(content, model) {
         } else {
             aiMessage = {
                 id: (Date.now() + 1).toString(),
-                content: data.response,
+                content: data.content,
                 type: 'ai',
                 model: model,
                 duration: data.duration,
