@@ -3,3 +3,7 @@ dotenv==0.9.9
 Flask 
 langchain-ibm 
 langchain
+huggingface_hub
+transformers
+openai
+langchain-openai

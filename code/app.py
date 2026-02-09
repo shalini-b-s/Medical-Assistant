@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template
-from model import llama_response, granite_response, mistral_response
+from model import llama_hf_response, llama_ibm_response, granite_response, mistral_response
 import time
 import warnings 
 warnings.filterwarnings(action= 'ignore')
@@ -24,16 +24,18 @@ def generate():
     start_time = time.time()
 
     try:
-        if model== 'llama':
-            result = llama_response(system_prompt, user_message)
+        if model == 'llama_hf':
+            result = llama_hf_response(system_prompt, user_message)
+        elif model == 'llama_ibm':
+            result = llama_ibm_response(system_prompt, user_message)
         elif model == 'granite':
             result = granite_response(system_prompt, user_message)
-        elif model =='mistral':
+        elif model == 'mistral':
             result = mistral_response(system_prompt, user_message)
         else:
             return jsonify({'error': "Invalid model selection"}), 400
         
-        result.duration = time.time() - start_time
+        # Note: result here is likely a BaseMessage from LangChain, check its attributes
         return jsonify({'content': result.content})
     
     except Exception as e:
