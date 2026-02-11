@@ -7,3 +7,4 @@ huggingface_hub
 transformers
 openai
 langchain-openai
+langchain-community
