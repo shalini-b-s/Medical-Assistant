@@ -67,9 +67,6 @@ child_splitter = RecursiveCharacterTextSplitter(chunk_size=50, chunk_overlap=10)
 
 parent_docs, child_docs = create_parent_child_docs(documents)
 
-print(documents[98])
-# print(len(parent_docs))
+store = LocalParentDocstore("./parent_docstore")
 
-# store = LocalParentDocstore("./parent_docstore")
-
-# store.mset([(parent.metadata['parent_id'], parent) for parent in parent_docs])
+store.mset([(parent.metadata['parent_id'], parent) for parent in parent_docs])
