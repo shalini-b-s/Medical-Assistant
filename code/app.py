@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from model import llama_hf_response, llama_ibm_response, granite_response, mistral_response
+from augmented_prompt import rag_prompt, format_context
+from retriever import retriever
 import time
 import warnings 
 warnings.filterwarnings(action= 'ignore')
@@ -19,19 +21,22 @@ def generate():
     if not user_message or not model: 
         return jsonify({"error": "Missing message or model selection"}), 400
     
-    system_prompt = "You are an AI assistant helping with customer inquiries. Provide a helpful and concise response."
+    # system_prompt = "You are an AI assistant helping with customer inquiries. Provide a helpful and concise response."
 
-    start_time = time.time()
+    # start_time = time.time()
+
+    relevant_child_chunks, distances = retriever.get_relevant_documents(user_message)
+    context = format_context(relevant_child_chunks)
 
     try:
         if model == 'llama_hf':
-            result = llama_hf_response(system_prompt, user_message)
+            result = llama_hf_response(context, user_message)
         elif model == 'llama_ibm':
-            result = llama_ibm_response(system_prompt, user_message)
+            result = llama_ibm_response(context, user_message)
         elif model == 'granite':
-            result = granite_response(system_prompt, user_message)
+            result = granite_response(context, user_message)
         elif model == 'mistral':
-            result = mistral_response(system_prompt, user_message)
+            result = mistral_response(context, user_message)
         else:
             return jsonify({'error': "Invalid model selection"}), 400
         
